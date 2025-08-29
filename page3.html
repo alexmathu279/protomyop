@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Notifications & History</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f4f4f4;
+    }
+
+    .tab-buttons {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .tab-buttons button {
+      padding: 10px 20px;
+      border: none;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+
+    .tab-buttons button.active {
+      background: #007bff;
+      color: white;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .card {
+      background: white;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      cursor: pointer;
+    }
+
+    .card:hover {
+      background-color: #f9f9f9;
+    }
+
+    .history-card {
+      display: flex;
+      align-items: center;
+      background: white;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .history-card img {
+      width: 60px;
+      height: 60px;
+      border-radius: 6px;
+      margin-right: 16px;
+    }
+
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      flex-direction: column;
+    }
+
+    .modal img {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #000;
+    }
+
+    .modal button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #e53935;
+      border: none;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+      .history-card {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .history-card img {
+        margin-bottom: 12px;
+      }
+    }
+
+    .back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 10px 14px;
+    color: #007aff;
+    background-color: #f0f0f5;
+    border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    transition: background-color 0.3s ease;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  .back-button:hover {
+    background-color: #e6e6ed;
+  }
+
+  .back-button .arrow {
+    font-size: 20px;
+    transform: rotate(180deg); /* to make it look like ← */
+    display: inline-block;
+  }
+  </style>
+</head>
+<body>
+
+  
+    <a href="page2.html" class="back-button">
+        <span class="arrow">›</span> Back
+    </a>
+  <div class="tab-buttons">
+    <button class="active" onclick="switchTab(0)">Notifications</button>
+    <button onclick="switchTab(1)">History</button>
+  </div>
+
+  <!-- Notifications Tab -->
+  <div class="tab-content active" id="tab0">
+    <div class="card" onclick="openModal('images/xray1.jpg')">
+      <h3>New Alert(x-ray result) </h3>
+      <p>Result for X-ray Scan you did on 14/07/25 at DDC</p>
+    </div>
+    <div class="card" onclick="openModal('images/ultrasoundresult.jpg')">
+      <h3>Appointment Reminder</h3>
+      <p>Its been 6 weeks sine your last ultra sound </p>
+    </div>
+    <div class="card" onclick="openModal('images/ecgresult.jpg')">
+      <h3>Offers on checkup !!</h3>
+      <p>20% discount on ecg checkup!</p>
+    </div>
+    <div class="card" onclick="openModal('images/bloodresult.jpg')">
+      <h3>New Alert(Blood Test)</h3>
+      <p>Result for Blood test you did on 9/07/25 at V Care Diagnostic</p>
+    </div>
+    <!-- <div class="card" onclick="openModal('images/ecgresult.jpg')">
+      <h3> </h3>
+      <p>20% discount on full-body checkup!</p>
+    </div>
+    <div class="card" onclick="openModal('images/ecgresult.jpg')">
+      <h3>Promotion</h3>
+      <p>20% discount on full-body checkup!</p>
+    </div> -->
+  </div>
+
+  <!-- History Tab -->
+  <div class="tab-content" id="tab1">
+    <div class="history-card">
+      <img src="https://via.placeholder.com/60" alt="History 1">
+      <div>
+        <h4>ECG Report</h4>
+        <p>Test completed on 12 July 2025</p>
+      </div>
+    </div>
+    <div class="history-card">
+      <img src="https://via.placeholder.com/60" alt="History 2">
+      <div>
+        <h4>Blood Test</h4>
+        <p>Collected from home on 10 July 2025</p>
+      </div>
+    </div>
+    <div class="history-card">
+      <img src="https://via.placeholder.com/60" alt="History 3">
+      <div>
+        <h4>X-Ray Chest</h4>
+        <p>Report uploaded on 5 July 2025</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Image Modal -->
+  <div class="modal" id="imageModal">
+    <img id="modalImage" src="" alt="Preview">
+    <button>Download</button>
+    <button onclick="closeModal()">X</button>
+    
+  </div>
+
+  <script>
+    function switchTab(index) {
+      const buttons = document.querySelectorAll('.tab-buttons button');
+      const contents = document.querySelectorAll('.tab-content');
+
+      buttons.forEach((btn, i) => {
+        btn.classList.toggle('active', i === index);
+      });
+
+      contents.forEach((tab, i) => {
+        tab.classList.toggle('active', i === index);
+        tab.style.display = i === index ? 'block' : 'none';
+      });
+
+      closeModal(); // Close modal when switching tabs
+    }
+
+    function openModal(imageSrc) {
+      document.getElementById('modalImage').src = imageSrc;
+      document.getElementById('imageModal').style.display = 'flex';
+
+      // Hide all tab contents when modal opens
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.style.display = 'none';
+      });
+    }
+
+    function closeModal() {
+      document.getElementById('imageModal').style.display = 'none';
+
+      // Restore visible tab
+      const activeTab = document.querySelector('.tab-content.active');
+      if (activeTab) activeTab.style.display = 'block';
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const activeTab = document.querySelector('.tab-content.active');
+      if (activeTab) activeTab.style.display = 'block';
+    });
+  </script>
+</body>
+</html>

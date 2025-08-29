@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MedKart - Buy Medicine Online</title>
+  <style>
+    :root {
+      --primary-color: #007bff;
+      --background-color: #f9f9f9;
+      --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--background-color);
+      padding: 20px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--primary-color);
+      color: white;
+      padding: 15px 20px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    h1, h2, h3, p {
+      margin: 0;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: var(--card-shadow);
+      padding: 16px;
+      text-align: center;
+      transition: transform 0.2s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 140px;
+      object-fit: contain;
+      margin-bottom: 10px;
+    }
+
+    button {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 12px;
+      margin-top: 10px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .modal {
+      position: fixed;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 500px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+      z-index: 999;
+      padding: 20px;
+    }
+
+    #cartItems {
+      margin: 10px 0;
+      padding-left: 20px;
+    }
+
+    @media screen and (max-width: 768px) {
+      header h1 {
+        font-size: 20px;
+      }
+
+      .product-grid {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      .product-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .modal {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Step 1: Upload Prescription -->
+  <div id="uploadPage">
+    <h2>Upload Your Prescription</h2>
+    <input type="file" id="prescriptionInput" accept="image/*" />
+    <br><br>
+    <button onclick="submitPrescription()">Submit</button>
+  </div>
+
+  <!-- Step 2: Medicine Store -->
+  <div id="storePage" class="hidden">
+    <a href="page2.html">←</a>
+    <header>
+      <h1>MedKart</h1>
+      <button onclick="viewCart()">Cart (<span id="cartCount">0</span>)</button>
+    </header>
+
+    <div class="product-grid">
+      <div class="product-card">
+        <img src="images/sample-medicine.jpg" alt="Paracetamol">
+        <h3>Paracetamol</h3>
+        <p>₹25</p>
+        <button onclick="addToCart('Paracetamol', 25)">Add to Cart</button>
+      </div>
+      <div class="product-card">
+        <img src="images/sample-medicine.jpg" alt="Cough Syrup">
+        <h3>Cough Syrup</h3>
+        <p>₹60</p>
+        <button onclick="addToCart('Cough Syrup', 60)">Add to Cart</button>
+      </div>
+      <div class="product-card">
+        <img src="images/sample-medicine.jpg" alt="Vitamin C">
+        <h3>Vitamin C</h3>
+        <p>₹40</p>
+        <button onclick="addToCart('Vitamin C', 40)">Add to Cart</button>
+      </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="modal hidden">
+      <h2>Your Cart</h2>
+      <ul id="cartItems"></ul>
+      <p><strong>Total: ₹<span id="cartTotal">0</span></strong></p>
+      <div>
+        <button onclick="checkout('online')">Pay Now</button>
+        <button onclick="checkout('cod')">Cash on Delivery</button>
+      </div>
+      <br />
+      <button onclick="closeCart()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    let cart = [];
+
+    function submitPrescription() {
+      const file = document.getElementById('prescriptionInput').files[0];
+      if (!file) {
+        alert("Please upload a prescription.");
+        return;
+      }
+      document.getElementById('uploadPage').style.display = 'none';
+      document.getElementById('storePage').classList.remove('hidden');
+    }
+
+    function addToCart(name, price) {
+      cart.push({ name, price });
+      document.getElementById("cartCount").innerText = cart.length;
+    }
+
+    function viewCart() {
+      const modal = document.getElementById('cartModal');
+      const list = document.getElementById('cartItems');
+      const total = document.getElementById('cartTotal');
+
+      list.innerHTML = '';
+      let sum = 0;
+
+      cart.forEach(item => {
+        const li = document.createElement('li');
+        li.innerText = `${item.name} - ₹${item.price}`;
+        list.appendChild(li);
+        sum += item.price;
+      });
+
+      total.innerText = sum;
+      modal.classList.remove('hidden');
+    }
+
+    function closeCart() {
+      document.getElementById('cartModal').classList.add('hidden');
+    }
+
+    function checkout(method) {
+      alert(`Order placed with ${method === 'online' ? 'Online Payment' : 'Cash on Delivery'}.`);
+      cart = [];
+      document.getElementById("cartCount").innerText = 0;
+      closeCart();
+    }
+  </script>
+
+</body>
+</html>
